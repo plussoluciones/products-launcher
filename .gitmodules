@@ -1,6 +1,6 @@
 [submodule "client-gateway"]
 	path = client-gateway
-	url = https://github.com/plussoluciones/client-gateway-ms.git
+	url = git@github.com/plussoluciones/client-gateway-ms.git
 [submodule "products-ms"]
 	path = products-ms
 	url = git@github.com:plussoluciones/products-ms.git
