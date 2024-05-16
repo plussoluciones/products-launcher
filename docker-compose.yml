@@ -18,41 +18,41 @@ services:
       - PORT=${CLIENT_GATEWAY_PORT}
       - NATS_SERVERS=nats://nats-server:4222
 
-  product-ms:
-    build: ./products-ms
-    volumes:
-      - ./products-ms/src:/usr/src/app/src
-    command: npm run start:dev
-    environment:
-      - PORT=3001
-      - NATS_SERVERS=nats://nats-server:4222
-      - DATABASE_URL=file:./dev.db
+  # product-ms:
+  #   build: ./products-ms
+  #   volumes:
+  #     - ./products-ms/src:/usr/src/app/src
+  #   command: npm run start:dev
+  #   environment:
+  #     - PORT=3001
+  #     - NATS_SERVERS=nats://nats-server:4222
+  #     - DATABASE_URL=file:./dev.db
 
-  order-ms:
-    build: ./orders-ms
+  # order-ms:
+  #   build: ./orders-ms
 
-    volumes:
-      - ./orders-ms/src:/usr/src/app/src
-    command: npm run start:dev
-    environment:
-      - PORT=3002
-      - NATS_SERVERS=nats://nats-server:4222
-      - DATABASE_URL=postgresql://postgres:123456@order-db:5432/ordersdb?schema=public
-    depends_on:
-      - order-db
+  #   volumes:
+  #     - ./orders-ms/src:/usr/src/app/src
+  #   command: npm run start:dev
+  #   environment:
+  #     - PORT=3002
+  #     - NATS_SERVERS=nats://nats-server:4222
+  #     - DATABASE_URL=postgresql://postgres:123456@order-db:5432/ordersdb?schema=public
+  #   depends_on:
+  #     - order-db
 
-  order-db:
-    container_name: orders_database
-    image: postgres:16.2
-    restart: always
-    ports:
-      - 5432:5432
-    volumes:
-      - ./orders-ms/postgres:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=ordersdb
+  # order-db:
+  #   container_name: orders_database
+  #   image: postgres:16.2
+  #   restart: always
+  #   ports:
+  #     - 5432:5432
+  #   volumes:
+  #     - ./orders-ms/postgres:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=123456
+  #     - POSTGRES_DB=ordersdb
 
   # =======================
   # Payments Microservices
@@ -73,3 +73,14 @@ services:
       - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
       - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
       - STRIPE_ENDPOINTSECRET=${STRIPE_ENDPOINTSECRET}
+
+  auth-ms:
+    build: ./auth-ms
+    volumes:
+      - ./auth-ms/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - NATS_SERVERS=nats://nats-server:4222
+      - AUTH_DATABASE_URL=${AUTH_DATABASE_URL}
+      - DATABASE_URL=${AUTH_DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
