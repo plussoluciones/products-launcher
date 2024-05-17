@@ -1,0 +1,69 @@
+version: "3"
+
+services:
+  nats-server:
+    image: nats:latest
+
+  client-gateway:
+    container_name: client-gateway
+    build:
+      context: ./client-gateway
+      dockerfile: dockerfile.prod
+    image: client-gateway-prod
+    ports:
+      - ${CLIENT_GATEWAY_PORT}:${CLIENT_GATEWAY_PORT}
+    environment:
+      - PORT=${CLIENT_GATEWAY_PORT}
+      - NATS_SERVERS=${NATS_SERVERS}
+
+  product-ms:
+    image: product-ms
+    build:
+      context: ./products-ms
+      dockerfile: dockerfile.prod
+
+    environment:
+      - NATS_SERVERS=${NATS_SERVERS}
+      - DATABASE_URL=file:./dev.db
+
+  order-ms:
+    build:
+      context: ./orders-ms
+      dockerfile: dockerfile.prod
+      args:
+        - ORDER_DATABASE_URL=${POSTGRES_DATABASE_ORDER}
+    image: order-ms
+    environment:
+      - NATS_SERVERS=${NATS_SERVERS}
+      - DATABASE_URL=${POSTGRES_DATABASE_ORDER}
+
+  # # =======================
+  # # Payments Microservices
+  # # =======================
+
+  payment-ms:
+    image: payment-ms
+    build:
+      context: ./payments-ms
+      dockerfile: dockerfile.prod
+    ports:
+      - ${PAYMENTS_MS_PORT}:${PAYMENTS_MS_PORT}
+    container_name: payments-ms
+    environment:
+      - PORT=${PAYMENTS_MS_PORT}
+      - NATS_SERVERS=${NATS_SERVERS}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_SUCCESS_URL=${STRIPE_SUCCESS_URL}
+      - STRIPE_CANCEL_URL=${STRIPE_CANCEL_URL}
+      - STRIPE_ENDPOINTSECRET=${STRIPE_ENDPOINTSECRET}
+
+  auth-ms:
+    image: auth-ms
+    build:
+      context: ./auth-ms
+      dockerfile: dockerfile.prod
+    environment:
+      - NATS_SERVERS=${NATS_SERVERS}
+      - AUTH_DATABASE_URL=${AUTH_DATABASE_URL}
+      - DATABASE_URL=${AUTH_DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
