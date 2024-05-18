@@ -9,7 +9,7 @@ services:
     build:
       context: ./client-gateway
       dockerfile: dockerfile.prod
-    image: client-gateway-prod
+    image: us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/client-gateway-prod
     ports:
       - ${CLIENT_GATEWAY_PORT}:${CLIENT_GATEWAY_PORT}
     environment:
@@ -17,7 +17,7 @@ services:
       - NATS_SERVERS=${NATS_SERVERS}
 
   product-ms:
-    image: product-ms
+    image: us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/product-ms
     build:
       context: ./products-ms
       dockerfile: dockerfile.prod
@@ -32,7 +32,7 @@ services:
       dockerfile: dockerfile.prod
       args:
         - ORDER_DATABASE_URL=${POSTGRES_DATABASE_ORDER}
-    image: order-ms
+    image: us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/order-ms
     environment:
       - NATS_SERVERS=${NATS_SERVERS}
       - DATABASE_URL=${POSTGRES_DATABASE_ORDER}
@@ -42,7 +42,7 @@ services:
   # # =======================
 
   payment-ms:
-    image: payment-ms
+    image: us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/payment-ms
     build:
       context: ./payments-ms
       dockerfile: dockerfile.prod
@@ -58,7 +58,7 @@ services:
       - STRIPE_ENDPOINTSECRET=${STRIPE_ENDPOINTSECRET}
 
   auth-ms:
-    image: auth-ms
+    image: us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/auth-ms
     build:
       context: ./auth-ms
       dockerfile: dockerfile.prod
