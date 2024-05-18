@@ -21,7 +21,7 @@ kubectl create deployment <nombre> --image=<registro/url/imagen> --dry-run=clien
 # Escalar o Reducir las replicas
 
 ```
-kubectl scale --replicas=0 deployment/payments-ms
+kubectl scale --replicas=1 deployment/payments-ms
 
 ```
 

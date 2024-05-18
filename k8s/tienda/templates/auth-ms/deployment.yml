@@ -33,5 +33,11 @@ spec:
                 secretKeyRef:
                   name: auth-secrets
                   key: jwt_secret
-          resources: {}
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "200m"
+            limits:
+              memory: "128Mi"
+              cpu: "400m"
 status: {}
