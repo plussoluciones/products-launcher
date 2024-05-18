@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: client-gateway
+  name: client-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-gateway
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: client-gateway
+    spec:
+      containers:
+        - image: us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/client-gateway
+          name: client-gateway
+          resources: {}
+status: {}
