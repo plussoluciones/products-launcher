@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: payments-ms
+  name: payments-ms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments-ms
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: payments-ms
+    spec:
+      containers:
+        - image: us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/payment-ms
+          name: payment-ms
+          env:
+            - name: PORT
+              value: "3003"
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: payment-secrets
+                  key: stripe_secret_key
+            - name: STRIPE_ENDPOINTSECRET
+              valueFrom:
+                secretKeyRef:
+                  name: payment-secrets
+                  key: stripe_endpointsecret
+            - name: STRIPE_SUCCESS_URL
+              value: "http://localhost:3003/payments/success"
+            - name: STRIPE_CANCEL_URL
+              value: "http://localhost:3003/payments/cancelled"
+            - name: NATS_SERVERS
+              value: "nats://nats"
+          resources: {}
+status: {}
