@@ -18,6 +18,13 @@
 kubectl create deployment <nombre> --image=<registro/url/imagen> --dry-run=client -o yaml > deployment.yml
 ```
 
+# Escalar o Reducir las replicas
+
+```
+kubectl scale --replicas=0 deployment/payments-ms
+
+```
+
 # Crear service
 
 ```
